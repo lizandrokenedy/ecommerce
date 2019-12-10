@@ -40,7 +40,7 @@ class Page
 
     public function setData($data = array())
     {
-        foreach ($this->options["data"] as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->tpl->assign($key, $value);
         }
     }
