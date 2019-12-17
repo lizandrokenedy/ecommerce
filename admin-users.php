@@ -3,16 +3,94 @@
 use Hcode\Model\User;
 use Hcode\PageAdmin;
 
+$app->get('/admin/users/:iduser/password', function ($iduser) {
+
+	User::verifyLogin();
+
+	$user = new User();
+
+	$user->get((int) $iduser);
+
+	$page = new PageAdmin();
+
+	$page->setTpl("users-password", array(
+		"user" => $user->getValues(),
+		"msgError" => User::getError(),
+		"msgSuccess" => User::getSuccess()
+	));
+});
+
+$app->post('/admin/users/:iduser/password', function ($iduser) {
+
+	User::verifyLogin();
+
+	if (!isset($_POST['despassword']) || $_POST['despassword'] === '') {
+
+		User::setError("Preencha a nova senha!");
+		header("Location: /admin/users/$iduser/password");
+		exit;
+	}
+
+	if (!isset($_POST['despassword-confirm']) || $_POST['despassword-confirm'] === '') {
+
+		User::setError("Preencha a confirmação da nova senha!");
+		header("Location: /admin/users/$iduser/password");
+		exit;
+	}
+
+	if ($_POST['despassword'] !==  $_POST['despassword-confirm']) {
+
+		User::setError("Confirme corretamente as senhas!");
+		header("Location: /admin/users/$iduser/password");
+		exit;
+	}
+
+	$user = new User();
+
+	$user->get((int) $iduser);
+
+	$user->setPassword(User::getPasswordHash($_POST['despassword']));
+
+	User::setSuccess("Registro atualizado com sucesso!");
+	header("Location: /admin/users/$iduser/password");
+	exit;
+});
+
 $app->get('/admin/users', function () {
 
 	User::verifyLogin();
 
-	$users = User::listAll();
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
+
+	$page = (isset($_GET['page'])) ? (int) $_GET['page'] : 1;
+
+	if ($search != '') {
+
+		$pagination = User::getPageSearch($search, $page);
+	} else {
+
+		$pagination = User::getPage($page);
+	}
+
+	$pages = [];
+
+	for ($i = 0; $i < $pagination['pages']; $i++) {
+
+		array_push($pages, [
+			'href' => '/admin/users?' . http_build_query([
+				'page' => $i + 1,
+				'search' => $search
+			]),
+			'text' => $i + 1
+		]);
+	}
 
 	$page = new PageAdmin;
 
 	$page->setTpl("users", array(
-		"users" => $users
+		"users" => $pagination['data'],
+		"search" => $search,
+		"pages" => $pages
 	));
 });
 
