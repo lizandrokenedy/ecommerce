@@ -3,6 +3,7 @@
 use Hcode\Model\Address;
 use Hcode\Model\Cart;
 use Hcode\Model\Category;
+use Hcode\Model\Notification;
 use Hcode\Model\Order;
 use Hcode\Model\OrderStatus;
 use Hcode\Model\Product;
@@ -174,6 +175,15 @@ $app->post("/checkout", function () {
 		'vltotal' => $cart->getvltotal()
 	]);
 	$order->save();
+
+	$notification = new Notification();
+
+	$notification->setData([
+		"idorder" => $order->getidorder()
+	]);
+
+	$notification->save();
+
 	switch ((int) $_POST['payment-method']) {
 		case 1:
 			header("Location: /order/" . $order->getidorder() . "/pagseguro");

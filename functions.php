@@ -2,6 +2,8 @@
 
 use \Hcode\Model\User;
 use \Hcode\Model\Cart;
+use Hcode\Model\Notification;
+
 function formatPrice($vlprice)
 {
 	if (!$vlprice > 0) $vlprice = 0;
@@ -17,7 +19,7 @@ function checkLogin($inadmin = true)
 }
 function getUserName()
 {
-    $user = User::getFromSession();
+	$user = User::getFromSession();
 	return $user->getdesperson();
 }
 function getCartNrQtd()
@@ -32,3 +34,19 @@ function getCartVlSubTotal()
 	$totals = $cart->getProductsTotals();
 	return formatPrice($totals['vlprice']);
 }
+
+function getNotifications()
+{ 
+    $notifications = Notification::getAll();
+	return $notifications;
+}
+
+function getNrNotifications()
+{ 
+	$notifications = Notification::getAll();
+	return count($notifications);
+}
+
+
+
+

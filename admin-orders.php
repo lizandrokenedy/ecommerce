@@ -1,5 +1,6 @@
 <?php
 
+use Hcode\Model\Notification;
 use Hcode\Model\Order;
 use Hcode\Model\OrderStatus;
 use Hcode\Model\User;
@@ -12,7 +13,7 @@ $app->get("/admin/orders/:idorder/status", function ($idorder) {
 
 	$order = new Order();
 
-	$order->get((int)$idorder);
+	$order->get((int)$idorder);	
 
 	$page = new PageAdmin();
 
@@ -69,6 +70,8 @@ $app->get("/admin/orders/:idorder", function ($idorder) {
 	$order = new Order();
 
 	$order->get((int)$idorder);
+
+	Notification::updateVisualizationNotification((int)$idorder);
 
 	$cart = $order->getCart();
 

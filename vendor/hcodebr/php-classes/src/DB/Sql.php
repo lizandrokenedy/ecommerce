@@ -2,6 +2,8 @@
 
 namespace Hcode\DB;
 
+use Exception;
+
 class Sql {
 
 	const HOSTNAME = "127.0.0.1";
@@ -48,6 +50,12 @@ class Sql {
 		$this->setParams($stmt, $params);
 
 		$stmt->execute();
+
+		// $rowAffect = $stmt->rowCount();
+
+		// if(!$rowAffect) {
+		// 	throw new Exception("Erro ao atualizar registro");
+		// }
 
 	}
 

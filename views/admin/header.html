@@ -119,20 +119,23 @@ desired effect
                             <!-- Menu toggle button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-warning">{function="getNrNotifications()"}</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 10 notifications</li>
+                                <li class="header">Você tem {function="getNrNotifications()"} notificações</li>
                                 <li>
                                     <!-- Inner Menu: contains the notifications -->
                                     <ul class="menu">
+                                        
+                                        {loop="getNotifications()"}
                                         <li>
                                             <!-- start notification -->
-                                            <a href="#">
-                                                <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                            <a href="/admin/orders/{$value.idorder}">
+                                                <i class="fa fa-users text-aqua"></i>Nova ordem de compra N° {$value.idorder}
                                             </a>
                                         </li>
                                         <!-- end notification -->
+                                        {/loop}
                                     </ul>
                                 </li>
                                 <li class="footer"><a href="#">View all</a></li>
@@ -189,7 +192,8 @@ desired effect
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
-                                    <img src="/res/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="/res/admin/dist/img/user2-160x160.jpg" class="img-circle"
+                                        alt="User Image">
 
                                     <p>
                                         Alexander Pierce - Web Developer
